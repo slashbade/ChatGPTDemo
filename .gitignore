@@ -1,0 +1,6 @@
+.preprocessed/
+.settings/
+bin/
+deliverables/
+.classpath
+.project
