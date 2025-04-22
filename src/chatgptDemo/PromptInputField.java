@@ -4,6 +4,7 @@ import net.rim.device.api.system.Display;
 import net.rim.device.api.ui.component.EditField;
 import net.rim.device.api.ui.decor.BackgroundFactory;
 import net.rim.device.api.ui.Color;
+import net.rim.device.api.ui.Font;
 import net.rim.device.api.ui.Graphics;
 import net.rim.device.api.ui.Keypad;
 
@@ -14,6 +15,10 @@ public class PromptInputField extends EditField {
     public PromptInputField(String initialText, int maxChars, long style) {
         super("", initialText, maxChars, style);
         super.setBackground(BackgroundFactory.createSolidBackground(Color.WHITE));
+        super.setPadding(2, 2, 0, 2);
+        Font baseFont = Font.getDefault();
+		Font inputFont = baseFont.derive(Font.PLAIN, baseFont.getHeight() - 2);
+        super.setFont(inputFont);
     }
     
 
@@ -21,7 +26,7 @@ public class PromptInputField extends EditField {
         if (key == Keypad.KEY_ENTER) {
             boolean altDown = (status & Keypad.status(Keypad.KEY_SHIFT_LEFT)) != 0;
             if (altDown) {
-                // Alt + Enter → insert newline
+                // Shift + Enter → insert newline
                 this.insert("\n");
             } else {
                 // Enter → send
@@ -53,9 +58,7 @@ public class PromptInputField extends EditField {
             g.drawText(placeholder, padding, padding);
         }
     	g.setColor(0x000000);
-    	g.pushRegion(getContentLeft() + padding, getContentTop() + padding, super.getWidth(), super.getHeight(), 0, 0);
     	super.paint(g);
-        g.popContext();
     }
     
     protected void layout(int width, int height) {
