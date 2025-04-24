@@ -2,7 +2,7 @@
 
 ## Screenshot
 
-![Screenshot1](screenshots/screenshot.png)
+![Screenshot1](https://github.com/slashbade/ChatGPTDemo/tree/main/screenshots/screenshot.png)
 
 ## Usage
 
