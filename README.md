@@ -2,7 +2,7 @@
 
 ## Screenshot
 
-<img src="screenshots/screenshot.png" width="200">
+<img src="screenshots/screenshot.png" width="500">
 
 ## Usage
 
