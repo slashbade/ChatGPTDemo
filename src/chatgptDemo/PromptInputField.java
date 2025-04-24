@@ -1,6 +1,5 @@
 package chatgptDemo;
 
-import net.rim.device.api.system.Display;
 import net.rim.device.api.ui.component.EditField;
 import net.rim.device.api.ui.decor.BackgroundFactory;
 import net.rim.device.api.ui.Color;
@@ -15,12 +14,11 @@ public class PromptInputField extends EditField {
     public PromptInputField(String initialText, int maxChars, long style) {
         super("", initialText, maxChars, style);
         super.setBackground(BackgroundFactory.createSolidBackground(Color.WHITE));
-        super.setPadding(2, 2, 0, 2);
         Font baseFont = Font.getDefault();
-		Font inputFont = baseFont.derive(Font.PLAIN, baseFont.getHeight() - 2);
+		Font inputFont = baseFont.derive(Font.PLAIN, baseFont.getHeight());
+		super.setPadding(0, 2, 0, 2);
         super.setFont(inputFont);
     }
-    
 
     public boolean keyChar(char key, int status, int time) {
         if (key == Keypad.KEY_ENTER) {
@@ -43,6 +41,7 @@ public class PromptInputField extends EditField {
         return super.keyChar(key, status, time);
     }
 
+    
     public void setSendListener(SendListener l) {
         this.listener = l;
     }
@@ -52,7 +51,7 @@ public class PromptInputField extends EditField {
     }
     protected void paint(Graphics g) {
         // Draw placeholder if empty
-        int padding = 2;
+        int padding = 0;
     	if (getTextLength() == 0) {
             g.setColor(0x999999); // light gray
             g.drawText(placeholder, padding, padding);
@@ -61,10 +60,4 @@ public class PromptInputField extends EditField {
     	super.paint(g);
     }
     
-    protected void layout(int width, int height) {
-    	int maxWidth = Display.getWidth();
-    	int padding = 10;
-        super.layout(maxWidth, height);
-        setExtent(maxWidth + 4*padding, super.getHeight() + padding);
-    }
 }
