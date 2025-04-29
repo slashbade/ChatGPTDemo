@@ -8,8 +8,6 @@ import java.util.Vector;
 import javax.microedition.io.Connector;
 import javax.microedition.io.HttpsConnection;
 
-import chatgptDemo.AppConfig;
-
 /**
  * StreamChatGPTClient: 用于与OpenAI建立�?�?连接。
  */
@@ -17,22 +15,16 @@ public class OpenAIStreamClient {
 	
 	public String baseUrl;
     private String apiKey;
-
-    public OpenAIStreamClient() {}
     
-    public OpenAIStreamClient(String bul, String apk) {
-    	baseUrl = bul;
-    	apiKey = apk;
-    }
-    
-    public void setApiKey(String key) {
-        this.apiKey = key;
+    public OpenAIStreamClient(String baseUrl, String apiKey) {
+    	this.baseUrl = baseUrl;
+    	this.apiKey = apiKey;
     }
 
     /**
      * 建立连接并返回 InputStream
      */
-    public InputStream connectStream(Vector messages) throws IOException {
+    public InputStream connectStream(Vector messages, String model) throws IOException {
         if (apiKey == null || apiKey.length() == 0) {
             throw new IOException("API Key not set.");
         }
@@ -45,7 +37,7 @@ public class OpenAIStreamClient {
         conn.setRequestProperty("Authorization", "Bearer " + apiKey);
         conn.setRequestProperty("Accept", "text/event-stream");
         
-        OpenAIRequest openAIRequest = new OpenAIRequest(AppConfig.model, messages, true);
+        OpenAIRequest openAIRequest = new OpenAIRequest(model, messages, true);
         byte[] bodyData = openAIRequest.toJSONString().getBytes("UTF-8");
         
         conn.setRequestProperty("Content-Length", String.valueOf(bodyData.length));

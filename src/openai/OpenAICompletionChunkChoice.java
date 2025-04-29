@@ -6,12 +6,12 @@ import org.json.me.JSONException;
 import org.json.me.JSONString;
 import org.json.me.JSONObject;
 
-public class OpenAIChoice implements JSONString {
+public class OpenAICompletionChunkChoice implements JSONString {
 	public OpenAIMessage delta;
 	public String finishReason;
 	public Integer index;
 	
-	public OpenAIChoice(JSONObject json) throws JSONException {
+	public OpenAICompletionChunkChoice(JSONObject json) throws JSONException {
 		delta = new OpenAIMessage(json.getJSONObject("delta"));
 		finishReason = json.optString("finish_reason");
 		index = new Integer(json.getInt("index"));

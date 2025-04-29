@@ -49,26 +49,10 @@ public class MessageContainer extends VerticalFieldManager {
 		markdownContainer = new MarkdownContainer(baseFont);
 		markdownContainer.addContent(content);
 		markdownContainer.setMargin(0, padding, padding / 2, padding);
-//		RichTextField contentField = new RichTextField(content,
-//				RichTextField.USE_ALL_WIDTH | RichTextField.TEXT_JUSTIFY_LEFT) {
-//			public int getPreferredWidth() {
-//				int maxWidth = Display.getWidth();
-//				if (role.equals("user")) {
-//					maxWidth = maxWidth * 3 / 4;
-//				} else {
-//					maxWidth = maxWidth * 7 / 8;
-//				}
-//				int textWidth = getFont().getAdvance(getText());
-//				return Math.min(textWidth, maxWidth) + 2 * padding;
-//			}
-//		};
-//		contentField.setFont(contentFont);
-//		contentField.setMargin(0, padding, padding / 2, padding);
 		SeparatorField separatorField = new SeparatorField();
 		separatorField.setMargin(0, padding, 0, padding);
 		add(roleField);
 		add(separatorField);
-//		add(contentField);
 		add(markdownContainer);
 	}
 

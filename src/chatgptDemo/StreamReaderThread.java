@@ -42,7 +42,7 @@ public class StreamReaderThread extends Thread {
                         if (chunk.choices.isEmpty()) {
                         	continue;
                         }
-                        OpenAIChoice message = (OpenAIChoice) chunk.choices.firstElement();
+                        OpenAICompletionChunkChoice message = (OpenAICompletionChunkChoice) chunk.choices.firstElement();
                         final String updateText = message.delta.content;
                         UiApplication.getUiApplication().invokeLater(new Runnable() {
                             public void run() {
@@ -52,16 +52,16 @@ public class StreamReaderThread extends Thread {
                         
                     }
                 } else if (c != '\r') {
-                    if (lineBuffer.length() < 4096) { // �?制最大行长
+                    if (lineBuffer.length() < 4096) {
                         lineBuffer.append(c);
                     } else {
-                        lineBuffer.setLength(0); // 超长直接丢弃这行
+                        lineBuffer.setLength(0);
                     }
                 }
             }
             UiApplication.getUiApplication().invokeLater(new Runnable() {
                 public void run() {
-                    callback.onComplete(); // ✅ 统一提交完整内容
+                    callback.onComplete();
                 }
             });
 

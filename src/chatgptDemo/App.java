@@ -28,6 +28,6 @@ public class App extends UiApplication
     public App()
     {        
         // Push a screen onto the UI stack for rendering.
-        pushScreen(new StreamMultiChatScreen());
+        pushScreen(new ChatHomeScreen());
     }    
 }

@@ -17,9 +17,9 @@ import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.EditField;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.Menu;
+import net.rim.device.api.ui.component.PasswordEditField;
 import net.rim.device.api.ui.component.RichTextField;
 import net.rim.device.api.ui.component.SeparatorField;
-import net.rim.device.api.ui.container.GridFieldManager;
 import net.rim.device.api.ui.container.MainScreen;
 import net.rim.device.api.ui.container.VerticalFieldManager;
 import net.rim.device.api.ui.decor.Background;
@@ -27,6 +27,12 @@ import net.rim.device.api.ui.decor.BackgroundFactory;
 import net.rim.device.api.util.StringProvider;
 
 public class SettingsScreen extends MainScreen {
+	EditField baseUrlField;
+	PasswordEditField apiKeyField;
+	EditField modelField;
+	EditField tempField;
+	EditField instructionField;
+	ButtonField saveButton;
 
     public SettingsScreen() {
         setTitle("Settings");
@@ -34,48 +40,46 @@ public class SettingsScreen extends MainScreen {
         VerticalFieldManager instanceSettingsGroup = createSettingsGroup("Instance");
         
         addTitle("Instance URL:", instanceSettingsGroup);
-        final EditField baseUrlField = new EditField("", AppConfig.baseUrl, 200, EditField.EDITABLE | Field.FOCUSABLE | EditField.FILTER_URL);
+        baseUrlField = new EditField("", AppConfig.baseUrl, 200, EditField.EDITABLE | Field.FOCUSABLE | EditField.FILTER_URL);
         instanceSettingsGroup.add(padded(baseUrlField));
 
         addTitle("Instance API Key:", instanceSettingsGroup);
-        final EditField apiKeyField = new EditField("", AppConfig.apiKey, 200, EditField.EDITABLE | Field.FOCUSABLE | EditField.FILTER_URL);
+        apiKeyField = new PasswordEditField("", AppConfig.apiKey, 200, EditField.EDITABLE | Field.FOCUSABLE | EditField.FILTER_URL);
         instanceSettingsGroup.add(padded(apiKeyField));
 
         VerticalFieldManager modelSettingsGroup = createSettingsGroup("Model");
         addTitle("Model: (e.g. gpt-3.5-turbo)", modelSettingsGroup);
-        final EditField modelField = new EditField("", AppConfig.model, 50, EditField.EDITABLE | Field.FOCUSABLE);
+        modelField = new EditField("", AppConfig.model, 50, EditField.EDITABLE | Field.FOCUSABLE);
         modelSettingsGroup.add(padded(modelField));
 
 
         addTitle("Temperature: (0.0 ~ 1.0)", modelSettingsGroup);
-        final EditField tempField = new EditField("", String.valueOf(AppConfig.temperature), 10, EditField.EDITABLE | Field.FOCUSABLE);
+        tempField = new EditField("", String.valueOf(AppConfig.temperature), 10, EditField.EDITABLE | Field.FOCUSABLE);
         modelSettingsGroup.add(padded(tempField));
 
-
         addTitle("Instruction:", modelSettingsGroup);
-        final EditField instructionField = new EditField("", AppConfig.instruction, 200, EditField.EDITABLE | Field.FOCUSABLE);
+        instructionField = new EditField("", AppConfig.instruction, 200, EditField.EDITABLE | Field.FOCUSABLE);
         modelSettingsGroup.add(padded(instructionField));
         
         // Save button
-        ButtonField saveButton = new ButtonField("Save", ButtonField.CONSUME_CLICK | Field.FIELD_RIGHT);
+        saveButton = new ButtonField("Save", ButtonField.CONSUME_CLICK | Field.FIELD_RIGHT);
         saveButton.setChangeListener(new FieldChangeListener() {
             public void fieldChanged(Field field, int context) {
-                saveAll(baseUrlField, apiKeyField, modelField, tempField, instructionField);
+                save();
+                Dialog.alert("Settings saved!");
+                UiApplication.getUiApplication().popScreen(SettingsScreen.this);
             }
         });
         
         add(instanceSettingsGroup);
         add(modelSettingsGroup);
         add(padded(saveButton));
-        Background background = BackgroundFactory
-				.createSolidBackground(0xb2b2b2);
+        Background background = BackgroundFactory.createSolidBackground(0xb2b2b2);
         getMainManager().setBackground(background);
         this.setTransition();
     }
     
-    private void saveAll(
-    		EditField baseUrlField, EditField apiKeyField, 
-    		EditField modelField, EditField tempField, EditField instructionField) {
+    public void save() {
     	String baseUrl = baseUrlField.getText().trim();
     	String apiKey = apiKeyField.getText().trim();
         String model = modelField.getText().trim();
@@ -100,8 +104,6 @@ public class SettingsScreen extends MainScreen {
         }
 
         AppConfig.saveAll(baseUrl, apiKey, model, temp, instruction);
-        Dialog.alert("Settings saved!");
-//        UiApplication.getUiApplication().popScreen(SettingsScreen.this);
     }
     
     private VerticalFieldManager createSettingsGroup(String groupName) {
@@ -150,8 +152,13 @@ public class SettingsScreen extends MainScreen {
         f.setMargin(2, 0, 6, 0);
         return f;
     }
-    protected boolean onSavePrompt() {
-        return true;
-    }
 
+    protected void makeMenu(Menu menu, int instance) {
+		super.makeMenu(menu, instance);
+		menu.add(new MenuItem(new StringProvider("Save"), 100, 10) {
+			public void run() {
+				save();
+			}
+		});
+	}
 }

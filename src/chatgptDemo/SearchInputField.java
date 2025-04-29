@@ -5,13 +5,12 @@ import net.rim.device.api.ui.decor.BackgroundFactory;
 import net.rim.device.api.ui.Color;
 import net.rim.device.api.ui.Font;
 import net.rim.device.api.ui.Graphics;
-import net.rim.device.api.ui.Keypad;
 
-public class PromptInputField extends EditField {
+public class SearchInputField extends EditField {
     private SendListener listener;
-    private String placeholder = "Type a message...";
+    private String placeholder = "Search";
 
-    public PromptInputField(String initialText, String placeholder, int maxChars, long style) {
+    public SearchInputField(String initialText, String placeholder, int maxChars, long style) {
         super("", initialText, maxChars, style);
         this.placeholder = placeholder;
         
@@ -22,25 +21,11 @@ public class PromptInputField extends EditField {
         super.setFont(inputFont);
     }
 
-    public boolean keyChar(char key, int status, int time) {
-        if (key == Keypad.KEY_ENTER) {
-            boolean altDown = (status & Keypad.status(Keypad.KEY_SHIFT_LEFT)) != 0;
-            if (altDown) {
-                // Shift + Enter → insert newline
-                this.insert("\n");
-            } else {
-                // Enter → send
-                if (listener != null) {
-                    final String text = getText().trim();
-                    if (text.length() > 0) {
-                        listener.onSend(text);
-                        setText(""); // clear input
-                    }
-                }
-            }
-            return true; // consume key
-        }
-        return super.keyChar(key, status, time);
+    protected boolean keyChar(char key, int status, int time) {
+        boolean handled = super.keyChar(key, status, time);
+        final String query = getText().trim().toLowerCase();
+        listener.onSend(query);
+        return handled;
     }
 
     
@@ -49,7 +34,7 @@ public class PromptInputField extends EditField {
     }
 
     public interface SendListener {
-        void onSend(String message);
+        void onSend(String query);
     }
     
     protected void paint(Graphics g) {

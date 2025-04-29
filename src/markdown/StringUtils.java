@@ -24,4 +24,20 @@ public class StringUtils {
 
         return result;
     }
+    
+    public static String replace(String source, String target, String replacement) {
+        if (source == null || target == null || target.length() == 0) {
+            return source;
+        }
+        StringBuffer sb = new StringBuffer();
+        int start = 0;
+        int index = 0;
+        while ((index = source.indexOf(target, start)) != -1) {
+            sb.append(source.substring(start, index));
+            sb.append(replacement);
+            start = index + target.length();
+        }
+        sb.append(source.substring(start));
+        return sb.toString();
+    }
 }
