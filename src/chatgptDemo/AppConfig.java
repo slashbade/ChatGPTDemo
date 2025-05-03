@@ -9,9 +9,9 @@ import org.json.me.*;
 
 public class AppConfig {
     private static final String STORE_NAME = "AppConfigStoreJSON";
-    public static String baseUrl = "https://api.openai-proxy.org/v1/chat/completions";
+    public static String baseUrl = "";
     public static String apiKey = "";
-    public static String model = "gpt-3.5-turbo";
+    public static String model = "";
     public static double temperature = 0.7;
     public static String instruction = "";
 

@@ -1,0 +1,10 @@
+MIDlet-Name: ChatGPTDemo
+MIDlet-Version: 1.1.0
+MIDlet-Vendor: BlackBerry Developer
+MIDlet-Jar-URL: ChatGPTDemo.jar
+MIDlet-Jar-Size: 0
+MicroEdition-Profile: MIDP-2.0
+MicroEdition-Configuration: CLDC-1.1
+MIDlet-1: ChatGPT Demo,img/icon-new-100x100.png,
+RIM-MIDlet-Flags-1: 1
+

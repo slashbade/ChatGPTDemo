@@ -104,7 +104,6 @@ public class ChatScreen extends MainScreen {
 				messageWrapper.parseContent(true);
 			}
 		});
-		this.setDirty(true);
 		return messageWrapper;
 	}
 	
@@ -116,6 +115,7 @@ public class ChatScreen extends MainScreen {
 				messageWrapper.parseContent(false);
 			}
 		});
+		this.setDirty(true);
 	}
 
 	private void sendMessages() {
