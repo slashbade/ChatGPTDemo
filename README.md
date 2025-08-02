@@ -1,8 +1,10 @@
 # ChatGPT Demo App for Blackberry OS 7
 
 ## Screenshot
-
-<img src="screenshots/screenshot.png" width="500">
+<div align="center">
+  <img src="./screenshots/screenshot-main.png" width="49%" alt="Chat with LLM">
+  <img src="./screenshots/screenshot-chat.png" width="49%" alt="Main screen">
+</div>
 
 ## Installation
 
