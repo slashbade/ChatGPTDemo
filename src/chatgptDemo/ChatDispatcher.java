@@ -1,69 +1,62 @@
 package chatgptDemo;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Vector;
 
 import org.json.me.JSONException;
 
+import chatgptDemo.screens.ChatScreen;
+
 import openai.OpenAIClient;
-import openai.OpenAICompletion;
-import openai.OpenAICompletionChoice;
-import openai.OpenAIMessage;
-import openai.OpenAIStreamClient;
+import openai.ResponseStream;
+import openai.models.OpenAICompletion;
+import openai.models.OpenAICompletionChoice;
+import openai.models.OpenAICompletionChunk;
+import openai.models.OpenAICompletionChunkChoice;
+import openai.models.OpenAIMessage;
 
 import net.rim.device.api.ui.UiApplication;
 
 public class ChatDispatcher extends Thread {
 	ChatScreen screen;
-	OpenAIStreamClient client;
+	String userContent;
+	OpenAIClient client;
 	OpenAIClient titleClient;
 	UiApplication uiApplication = UiApplication.getUiApplication();
 	
 	
-	public ChatDispatcher(ChatScreen screen) {
+	public ChatDispatcher(ChatScreen screen, String userContent) {
 		this.screen = screen;
+		this.userContent = userContent;
 	}
 	
 	public void run() {
 		try {
-			client = new OpenAIStreamClient(AppConfig.baseUrl, AppConfig.apiKey);
-			if (!(AppConfig.instruction.trim().equals(""))) {
+			client = new OpenAIClient(AppConfig.baseUrl, AppConfig.apiKey);
+			if (!(AppConfig.instruction.trim().equals("")) && screen.messages.isEmpty()) {
 				screen.appendMessage("system", AppConfig.instruction);
 			}
-			final InputStream is = client.connectStream(screen.messages, AppConfig.model);
+			screen.appendMessage("user", userContent);
+			screen.addMessageWrapper("user", userContent);
+			final ResponseStream rs = client.generateChatCompletionStream(screen.messages, AppConfig.model);
 			final StringBuffer currentBuffer = new StringBuffer();
-			final MessageContainerWrapper messageWrapper = screen.addMessageWrapper("assistant", "");
+			screen.addMessageWrapper("assistant", "");
+			OpenAICompletionChunk chunk;
 			
-			StreamReaderThread.StreamUpdateCallback streamReaderCallback = 
-					new StreamReaderThread.StreamUpdateCallback() {
-				public void onNewContent(final String content) {
-					currentBuffer.append(content);
-					screen.addContentAtMessageWrapper(messageWrapper, content);
-				}
-
-				public void onComplete() {
-					screen.appendMessage("assistant", currentBuffer.toString());
-					if (screen.messages.size() == 2) {
-						screen.chatTitle = generateChatTitle();
-					}
-					uiApplication.invokeLater(new Runnable() {
-						public void run() {
-							messageWrapper.parseContent(true);
-							screen.inputContainer.getField(0).setFocus();
-							
-						}
-					});
-				}
-				
-				public void onError(final String error) {
-					Util.dialogAlert("Stream Error: " + error);
-				}
-			};
-			
-			StreamReaderThread streamReaderThread = new StreamReaderThread(
-					is, streamReaderCallback);
-			streamReaderThread.start();
+			while ((chunk = rs.readChunk()) != null) {
+//				Util.dialogAlert(111);
+				if (chunk.choices.isEmpty()) continue;
+				final OpenAICompletionChunkChoice choice = (OpenAICompletionChunkChoice) chunk.choices.firstElement();
+				currentBuffer.append(choice.delta.content);
+                screen.addContentAtLastWrapper(choice.delta.content);
+			}
+			try {
+                if (rs != null) rs.close();
+            } catch (IOException ignored) {}
+			screen.appendMessage("assistant", currentBuffer.toString());
+			if (screen.messages.size() == 2) screen.setChatTitle(generateChatTitle());
+			screen.parseContentAtLastWrapper(true);
+			screen.setFocusOnInput();
 
 		} catch (final Exception e) {
 			Util.dialogAlert("Send failed: " + e.toString());
@@ -86,7 +79,7 @@ public class ChatDispatcher extends Thread {
 		Vector titleMessages = new Vector();
 		titleMessages.addElement(new OpenAIMessage("user", titleInstructionString));
 		try {
-			OpenAICompletion response = titleClient.generateCompletion(titleMessages, "gpt-3.5-turbo");
+			OpenAICompletion response = titleClient.createChatCompletion(titleMessages, "gpt-3.5-turbo");
 			String titleString = ((OpenAICompletionChoice) response.choices.elementAt(0)).message.content;
 //			Util.dialogAlert(titleString);
 			return titleString;

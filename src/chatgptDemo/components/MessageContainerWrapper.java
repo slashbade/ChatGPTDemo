@@ -1,4 +1,4 @@
-package chatgptDemo;
+package chatgptDemo.components;
 
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.container.VerticalFieldManager;

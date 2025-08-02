@@ -1,51 +1,15 @@
-package chatgptDemo;
+package chatgptDemo.components;
 
-import chatgptDemo.PromptInputField.SendListener;
 import net.rim.device.api.ui.Color;
-import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.Graphics;
 import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.XYRect;
-import net.rim.device.api.ui.component.EditField;
-import net.rim.device.api.ui.container.HorizontalFieldManager;
+import net.rim.device.api.ui.container.VerticalFieldManager;
 
-public class PromptInputContainer extends HorizontalFieldManager {
-	HorizontalFieldManager inputFieldWrapper;
-	PromptInputField inputField;
-	SendListener listener;
-
-	public PromptInputContainer() {
-		// TODO Auto-generated constructor stub
-		super(Manager.USE_ALL_WIDTH);
-		setPadding(8, 8, 8, 8);
-		inputFieldWrapper = new HorizontalFieldManager(Manager.FIELD_VCENTER) {
-			protected void paint(Graphics g) {
-				int round = 8;
-				int left = getContentLeft();
-				int top = getContentTop();
-				int width = getContentWidth();
-				int height = getContentHeight();
-				g.setColor(Color.WHITE);
-				g.fillRoundRect(left, top, width, height, round, round);
-				
-				g.setColor(0x000000);
-				super.paint(g);
-				g.setGlobalAlpha(150);
-				g.drawGradientFilledRoundedRect(left, top, width, round,
-						Color.GRAY, Color.WHITE, false,
-						Graphics.TOP_LEFT_ROUNDED_RECT_CORNER | Graphics.TOP_RIGHT_ROUNDED_RECT_CORNER, round, round);
-				g.setColor(Color.BLACK);
-				g.setGlobalAlpha(255);
-				g.drawRoundRect(left, top, width, height, round, round);
-			}
-		};
-		inputField = new PromptInputField("", " Type a message", 500, EditField.EDITABLE
-				| Field.FOCUSABLE | Field.USE_ALL_WIDTH | Field.FIELD_VCENTER);
-		inputField.setMargin(8, 2, 8, 2);
-		inputFieldWrapper.add(inputField);
-		add(inputFieldWrapper);
+public class TitleContainer extends VerticalFieldManager {
+	public TitleContainer() {
+		super(Manager.FIELD_LEFT | Manager.USE_ALL_WIDTH);
 	}
-	
 	protected void paintBackground(Graphics g) {
         int w = getWidth();
         int h = getHeight();
@@ -73,10 +37,6 @@ public class PromptInputContainer extends HorizontalFieldManager {
         g.setColor(0x000000);                     // black, slightly transparent
         g.fillRect(0, h - 3, w, 3);               // 3‑pixel fade
         g.setGlobalAlpha(oldAlpha);               // always restore
+        g.setColor(Color.WHITE);
     }
-	
-    public void setSendListener(PromptInputField.SendListener l) {
-        inputField.setSendListener(l);
-    }
-
 }

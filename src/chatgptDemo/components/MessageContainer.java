@@ -1,4 +1,4 @@
-package chatgptDemo;
+package chatgptDemo.components;
 
 import markdown.MarkdownContainer;
 import net.rim.device.api.ui.Field;

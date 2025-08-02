@@ -1,4 +1,4 @@
-package openai;
+package openai.models;
 
 import java.util.Hashtable;
 

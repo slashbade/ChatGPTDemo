@@ -1,4 +1,4 @@
-package chatgptDemo;
+package chatgptDemo.components;
 
 import net.rim.device.api.ui.component.EditField;
 import net.rim.device.api.ui.decor.BackgroundFactory;

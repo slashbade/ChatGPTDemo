@@ -1,6 +1,6 @@
-package chatgptDemo;
+package chatgptDemo.components;
 
-import chatgptDemo.PromptInputField.SendListener;
+import chatgptDemo.components.SearchInputField.SendListener;
 import net.rim.device.api.ui.Color;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.Graphics;
@@ -75,7 +75,7 @@ public class SearchInputContainer extends HorizontalFieldManager {
         g.setGlobalAlpha(oldAlpha);               // always restore
     }
 	
-    public void setSendListener(SearchInputField.SendListener l) {
+    public void setSendListener(SendListener l) {
         inputField.setSendListener(l);
     }
 

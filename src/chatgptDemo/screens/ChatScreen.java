@@ -1,4 +1,4 @@
-package chatgptDemo;
+package chatgptDemo.screens;
 
 import java.util.Vector;
 
@@ -7,7 +7,14 @@ import javax.microedition.rms.RecordStore;
 import org.json.me.JSONArray;
 import org.json.me.JSONObject;
 
-import openai.*;
+import chatgptDemo.AppConfig;
+import chatgptDemo.ChatDispatcher;
+import chatgptDemo.Util;
+import chatgptDemo.components.MessageContainerWrapper;
+import chatgptDemo.components.PromptInputContainer;
+import chatgptDemo.components.PromptInputField;
+import chatgptDemo.components.TitleContainer;
+import openai.models.OpenAIMessage;
 
 import net.rim.device.api.ui.*;
 import net.rim.device.api.ui.component.*;
@@ -61,10 +68,8 @@ public class ChatScreen extends MainScreen {
 
 		inputContainer = new PromptInputContainer();
 		inputContainer.setSendListener(new PromptInputField.SendListener() {
-			public void onSend(String content) {
-				appendMessage("user", content);
-				addMessageWrapper("user", content);
-				sendMessages();
+			public void onSend(String userContent) {
+				sendMessages(userContent);
 			}
 		});
 		setStatus(inputContainer);
@@ -92,11 +97,11 @@ public class ChatScreen extends MainScreen {
 		modelField.setText("Model: " + AppConfig.model);
 	}
 
-	public void appendMessage(String role, String content) {
+	public void appendMessage(final String role, final String content) {
 		messages.addElement(new OpenAIMessage(role, content));
 	}
 	
-	public MessageContainerWrapper addMessageWrapper(final String role, final String content) {
+	public void addMessageWrapper(final String role, final String content) {
 		final MessageContainerWrapper messageWrapper = new MessageContainerWrapper(role, content);
 		uiApplication.invokeLater(new Runnable() {
 			public void run() {		
@@ -104,11 +109,15 @@ public class ChatScreen extends MainScreen {
 				messageWrapper.parseContent(true);
 			}
 		});
-		return messageWrapper;
 	}
 	
-	public void addContentAtMessageWrapper(final MessageContainerWrapper messageWrapper,
-			final String newContent) {
+	public MessageContainerWrapper getLastMessageContainerWrapper() {
+		int messagesCount = chatContainer.getFieldCount();
+		return (MessageContainerWrapper) chatContainer.getField(messagesCount-1);
+	}
+	
+	public void addContentAtLastWrapper(final String newContent) {
+		final MessageContainerWrapper messageWrapper = getLastMessageContainerWrapper(); 
 		uiApplication.invokeLater(new Runnable() {
 			public void run() {
 				messageWrapper.addContent(newContent);
@@ -117,10 +126,36 @@ public class ChatScreen extends MainScreen {
 		});
 		this.setDirty(true);
 	}
-
-	private void sendMessages() {
+	
+	public void parseContentAtLastWrapper(final boolean isComplete) {
+		final MessageContainerWrapper messageWrapper = getLastMessageContainerWrapper();
+		uiApplication.invokeLater(new Runnable() {
+			public void run() {
+				messageWrapper.parseContent(isComplete);
+			}
+		});
+	}
+	
+	public void setFocusOnInput() {
+		uiApplication.invokeLater(new Runnable() {
+			public void run() {
+				inputContainer.getField(0).setFocus();
+			}
+		});
+		
+	}
+	
+	public void setChatTitle(final String title) {
+		uiApplication.invokeLater(new Runnable() {
+			public void run() {
+				chatTitle = title;
+			}
+		});
+	}
+	
+	private void sendMessages(String userContent) {
 //		chatContainer.setMuddy(true);
-		ChatDispatcher dispatcher = new ChatDispatcher(this);
+		ChatDispatcher dispatcher = new ChatDispatcher(this, userContent);
 		dispatcher.start();
 	}
 	
@@ -168,6 +203,7 @@ public class ChatScreen extends MainScreen {
 			
 			rsi.setRecord(1, chatSessionData, 0, chatSessionData.length);
 			rsi.closeRecordStore();
+			setDirty(false);
 			
         } catch (Exception e) {
         	Util.dialogAlert("Save chat session failed: " + e.toString());
@@ -196,10 +232,9 @@ public class ChatScreen extends MainScreen {
 		});
 		menu.add(new MenuItem(new StringProvider("Send"), 120, 10) {
 			public void run() {
-				String message = inputContainer.inputField.getText().trim();
-				if (message.length() > 0) {
-					addMessageWrapper("user", message);
-					sendMessages();
+				String userContent = inputContainer.inputField.getText().trim();
+				if (userContent.length() > 0) {
+					sendMessages(userContent);
 					inputContainer.inputField.setText("");
 				} else {
 					Dialog.alert("Please enter a message.");

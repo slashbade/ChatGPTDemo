@@ -1,6 +1,7 @@
-package openai;
+package openai.models;
 
 import java.util.Vector;
+
 
 import org.json.me.JSONArray;
 import org.json.me.JSONException;
@@ -12,10 +13,10 @@ public class OpenAIRequest implements JSONString {
 	Vector messages;
 	boolean stream;
 	
-	public OpenAIRequest(String mdl, Vector msgs, boolean strm) {
-		model = mdl;
-		messages = msgs;
-		stream = strm;
+	public OpenAIRequest(String model, Vector messages, boolean stream) {
+		this.model = model;
+		this.messages = messages;
+		this.stream = stream;
 	}
 	
 	public OpenAIRequest(JSONObject json) throws JSONException {

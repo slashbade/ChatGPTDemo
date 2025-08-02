@@ -1,5 +1,6 @@
-package chatgptDemo;
+package chatgptDemo.screens;
 
+import chatgptDemo.AppConfig;
 import net.rim.device.api.ui.Color;
 import net.rim.device.api.ui.DrawStyle;
 import net.rim.device.api.ui.Field;

@@ -1,4 +1,4 @@
-package chatgptDemo;
+package chatgptDemo.screens;
 
 import java.util.Vector;
 
@@ -6,6 +6,10 @@ import javax.microedition.rms.RecordStore;
 
 import org.json.me.JSONArray;
 import org.json.me.JSONObject;
+
+import chatgptDemo.Util;
+import chatgptDemo.components.SearchInputContainer;
+import chatgptDemo.components.SearchInputField;
 
 import net.rim.device.api.system.Display;
 import net.rim.device.api.ui.Graphics;
@@ -72,7 +76,7 @@ public class ChatHomeScreen extends MainScreen {
 
         chatList.setSize(chatSessions.size());
         add(chatList);
-        
+//        TLSTest ttttt = new TLSTest();
 //        Background background = BackgroundFactory
 //				.createSolidBackground(0xb2b2b2);
 //        getMainManager().setBackground(background);

@@ -1,6 +1,7 @@
-package openai;
+package openai.models;
 
 import java.util.Hashtable;
+
 
 import org.json.me.JSONException;
 import org.json.me.JSONString;

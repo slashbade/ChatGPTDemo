@@ -1,5 +1,6 @@
 package chatgptDemo;
 
+import chatgptDemo.screens.ChatHomeScreen;
 import net.rim.device.api.ui.UiApplication;
 
 /**
