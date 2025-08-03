@@ -1,4 +1,6 @@
 .vscode
 .preprocessed
+.deliverables
+.classpath
 META-INF
 bin
