@@ -2,27 +2,27 @@ MIDlet-Name: ChatGPTDemo
 MIDlet-Version: 1.1.0
 MIDlet-Vendor: BlackBerry Developer
 MIDlet-Jar-URL: ChatGPTDemo.jar
-MIDlet-Jar-Size: 555757
+MIDlet-Jar-Size: 555898
 MicroEdition-Profile: MIDP-2.0
 MicroEdition-Configuration: CLDC-1.1
 MIDlet-1: ChatGPT Demo,img/icon-new-100x100.png,
 RIM-MIDlet-Flags-1: 1
 Manifest-Version: 1.0
 RIM-COD-URL: ChatGPTDemo.cod
-RIM-COD-Size: 42284
-RIM-COD-Creation-Time: 1754163591
+RIM-COD-Size: 42300
+RIM-COD-Creation-Time: 1754208701
 RIM-COD-Module-Name: ChatGPTDemo
 RIM-COD-Module-Dependencies: net_rim_cldc,net_rim_json_org,net_rim_networkapi
-RIM-COD-SHA1: 89 dd 84 de d3 62 29 2e 7e 9d d0 e1 3d 0a 09 8b ad 20 6f ee
+RIM-COD-SHA1: 8a fd ab 82 47 90 88 81 0e f2 1a fa 87 70 1a 65 80 1b dd a0
 RIM-COD-URL-1: ChatGPTDemo-1.cod
 RIM-COD-Size-1: 61888
-RIM-COD-SHA1-1: 46 e6 f5 4b 41 e1 d7 32 7a ff 36 f0 3d 1a 33 22 35 61 e7 34
+RIM-COD-SHA1-1: 83 15 d5 91 69 c8 18 b5 6a 04 76 40 2d bd fb be 72 9c 3f be
 RIM-COD-URL-2: ChatGPTDemo-2.cod
 RIM-COD-Size-2: 61840
-RIM-COD-SHA1-2: a4 8f 2a 8b 5d 54 69 72 30 29 4f 7c 00 9b 82 0f ed 85 38 1b
+RIM-COD-SHA1-2: 4f bd c1 23 1c 4c ab d0 b7 5c 0b 2b 39 0c af ff 2f f1 e4 78
 RIM-COD-URL-3: ChatGPTDemo-3.cod
 RIM-COD-Size-3: 61840
-RIM-COD-SHA1-3: 9a bf 20 a8 85 3f d5 06 2f ff 91 39 7a 4a 7a 5c 1e 15 ee 4d
+RIM-COD-SHA1-3: 4d 32 a4 6e 45 d4 08 7c 20 4e 9f 70 28 b6 28 ee 3f a9 a4 26
 RIM-COD-URL-4: ChatGPTDemo-4.cod
-RIM-COD-Size-4: 41456
-RIM-COD-SHA1-4: f8 b3 ed 56 4c c4 9e 00 8c 38 03 da 84 94 81 69 6a 17 78 29
+RIM-COD-Size-4: 41516
+RIM-COD-SHA1-4: 67 c8 9e 61 7f f6 74 e2 84 38 60 d5 47 bd 6e 0c e8 0e 9f e6
