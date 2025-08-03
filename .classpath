@@ -3,5 +3,11 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="res"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/net.rim.ejde.BlackBerryVMInstallType/BlackBerry JRE 7.1.0"/>
+	<classpathentry kind="lib" path="C:/Eclipse/plugins/net.rim.ejde.componentpack7.1.0_7.1.0.10/components/lib/net_rim_api.jar">
+  		<attributes>
+    		<attribute name="javadoc_location"
+               value="file:C:/Eclipse/plugins/net.rim.ejde.componentpack7.1.0_7.1.0.10/components/docs/api"/>
+  			</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
