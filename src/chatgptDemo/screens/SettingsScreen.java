@@ -105,6 +105,7 @@ public class SettingsScreen extends MainScreen {
         }
 
         AppConfig.saveAll(baseUrl, apiKey, model, temp, instruction);
+        setDirty(false);
     }
     
     private VerticalFieldManager createSettingsGroup(String groupName) {
