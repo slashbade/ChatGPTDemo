@@ -32,7 +32,7 @@ public class OpenAIClient {
         OpenAIRequest requestBody = new OpenAIRequest(model, messages, false);
         byte[] bodyData = requestBody.toJSONString().getBytes("UTF-8");
    
-        HttpsConnection conn = createHttpsConnection();
+        HttpsConnection conn = createHttpsConnection("/chat/completions");
         OutputStream os = conn.openOutputStream();
         os.write(bodyData);
         os.flush();
@@ -45,29 +45,14 @@ public class OpenAIClient {
         return response;
     }
     
-//    /**
-//     * Stream mode completion, return an InputStream
-//     */
-//    public InputStream generateChatCompletionStream(Vector messages, String model) throws IOException {
-//        OpenAIRequest openAIRequest = new OpenAIRequest(model, messages, true);
-//        byte[] bodyData = openAIRequest.toJSONString().getBytes("UTF-8");
-//        
-//        HttpsConnection conn = createHttpsConnection();
-//        OutputStream os = conn.openOutputStream();
-//        os.write(bodyData);
-//        os.flush();
-//        os.close();
-//
-//        return conn.openInputStream();
-//    }
     /**
      * Stream mode completion, return an InputStream
      */
-    public ResponseStream generateChatCompletionStream(Vector messages, String model) throws IOException {
+    public ResponseStream createChatCompletionStream(Vector messages, String model) throws IOException {
         OpenAIRequest openAIRequest = new OpenAIRequest(model, messages, true);
         byte[] bodyData = openAIRequest.toJSONString().getBytes("UTF-8");
         
-        HttpsConnection conn = createHttpsConnection();
+        HttpsConnection conn = createHttpsConnection("/chat/completions");
         OutputStream os = conn.openOutputStream();
         os.write(bodyData);
         os.flush();
@@ -80,10 +65,12 @@ public class OpenAIClient {
      * @return
      * @throws IOException
      */
-    private HttpsConnection createHttpsConnection() throws IOException {
+    private HttpsConnection createHttpsConnection(String endPoint) throws IOException {
         if (apiKey == null || apiKey.length() == 0) {
             throw new IOException("API Key not set.");
         }
+        StringBuffer url = new StringBuffer(this.baseUrl);
+        url.append(endPoint);
     	ConnectionFactory connFactory = new ConnectionFactory();
     	connFactory.setEndToEndRequired(true);
     	int[] preferredTransportTypes = {
@@ -93,7 +80,7 @@ public class OpenAIClient {
     		TransportInfo.TRANSPORT_WAP
     	};
     	connFactory.setPreferredTransportTypes(preferredTransportTypes);
-    	ConnectionDescriptor connDescr = connFactory.getConnection(baseUrl);
+    	ConnectionDescriptor connDescr = connFactory.getConnection(url.toString());
     	if (connDescr==null) {
     		throw new IOException("Network not available.");
     	}

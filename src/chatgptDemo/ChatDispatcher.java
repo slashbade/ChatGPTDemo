@@ -38,7 +38,7 @@ public class ChatDispatcher extends Thread {
 			}
 			screen.appendMessage("user", userContent);
 			screen.addMessageWrapper("user", userContent);
-			final ResponseStream rs = client.generateChatCompletionStream(screen.messages, AppConfig.model);
+			final ResponseStream rs = client.createChatCompletionStream(screen.messages, AppConfig.model);
 			final StringBuffer currentBuffer = new StringBuffer();
 			screen.addMessageWrapper("assistant", "");
 			OpenAICompletionChunk chunk;
