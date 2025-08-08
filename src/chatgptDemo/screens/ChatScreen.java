@@ -34,13 +34,13 @@ public class ChatScreen extends MainScreen {
 	public Vector messages = new Vector(); // stores Message objects
 	public String chatTitle = "No name";
 	private int recordId;
-	
+
 	private static String chatStoreName = "ChatStore";
 	private static String chatTitleStoreName = "ChatTitleStore";
 
 	public ChatScreen(String chatTitle, int recordId) {
 		super(Manager.NO_VERTICAL_SCROLL);
-//		Util.dialogAlert(recordId);
+		// Util.dialogAlert(recordId);
 		this.recordId = recordId;
 		if (recordId > 0) {
 			load(chatTitle, recordId);
@@ -74,7 +74,7 @@ public class ChatScreen extends MainScreen {
 		});
 		setStatus(inputContainer);
 		getMainManager().setBackground(background);
-		
+
 		// Load previous messages
 		for (int i = 0; i < messages.size(); i++) {
 			OpenAIMessage m = (OpenAIMessage) messages.elementAt(i);
@@ -82,14 +82,14 @@ public class ChatScreen extends MainScreen {
 		}
 		if (chatContainer.getFieldCount() > 0) {
 			uiApplication.invokeLater(new Runnable() {
-			    public void run() {
-			    	chatContainer.getField(chatContainer.getFieldCount() - 1).setFocus();
-			    	chatContainer.invalidate();
-			    }
+				public void run() {
+					chatContainer.getField(chatContainer.getFieldCount() - 1).setFocus();
+					chatContainer.invalidate();
+				}
 			});
 		}
 		setTransition();
-		
+
 	}
 
 	protected void onExposed() {
@@ -100,24 +100,24 @@ public class ChatScreen extends MainScreen {
 	public void appendMessage(final String role, final String content) {
 		messages.addElement(new OpenAIMessage(role, content));
 	}
-	
+
 	public void addMessageWrapper(final String role, final String content) {
 		final MessageContainerWrapper messageWrapper = new MessageContainerWrapper(role, content);
 		uiApplication.invokeLater(new Runnable() {
-			public void run() {		
+			public void run() {
 				chatContainer.add(messageWrapper);
 				messageWrapper.parseContent(true);
 			}
 		});
 	}
-	
+
 	public MessageContainerWrapper getLastMessageContainerWrapper() {
 		int messagesCount = chatContainer.getFieldCount();
-		return (MessageContainerWrapper) chatContainer.getField(messagesCount-1);
+		return (MessageContainerWrapper) chatContainer.getField(messagesCount - 1);
 	}
-	
+
 	public void addContentAtLastWrapper(final String newContent) {
-		final MessageContainerWrapper messageWrapper = getLastMessageContainerWrapper(); 
+		final MessageContainerWrapper messageWrapper = getLastMessageContainerWrapper();
 		uiApplication.invokeLater(new Runnable() {
 			public void run() {
 				messageWrapper.addContent(newContent);
@@ -126,7 +126,7 @@ public class ChatScreen extends MainScreen {
 		});
 		this.setDirty(true);
 	}
-	
+
 	public void parseContentAtLastWrapper(final boolean isComplete) {
 		final MessageContainerWrapper messageWrapper = getLastMessageContainerWrapper();
 		uiApplication.invokeLater(new Runnable() {
@@ -135,16 +135,16 @@ public class ChatScreen extends MainScreen {
 			}
 		});
 	}
-	
+
 	public void setFocusOnInput() {
 		uiApplication.invokeLater(new Runnable() {
 			public void run() {
 				inputContainer.getField(0).setFocus();
 			}
 		});
-		
+
 	}
-	
+
 	public void setChatTitle(final String title) {
 		uiApplication.invokeLater(new Runnable() {
 			public void run() {
@@ -152,13 +152,13 @@ public class ChatScreen extends MainScreen {
 			}
 		});
 	}
-	
+
 	private void sendMessages(String userContent) {
-//		chatContainer.setMuddy(true);
+		// chatContainer.setMuddy(true);
 		ChatDispatcher dispatcher = new ChatDispatcher(this, userContent);
 		dispatcher.start();
 	}
-	
+
 	public void load(String chatTitle, int recordId) {
 		try {
 			RecordStore rsm = RecordStore.openRecordStore(chatStoreName, true);
@@ -169,12 +169,12 @@ public class ChatScreen extends MainScreen {
 				messages.addElement(new OpenAIMessage((JSONObject) mj.get(i)));
 			}
 			this.chatTitle = chatTitle;
-			
+
 		} catch (Exception e) {
 			Util.dialogAlert("Load chat session failed: " + e.toString());
 		}
 	}
-	
+
 	public void save() {
 		try {
 			RecordStore rsm = RecordStore.openRecordStore(chatStoreName, true);
@@ -182,34 +182,34 @@ public class ChatScreen extends MainScreen {
 			if (!(recordId < 0)) {
 				rsm.setRecord(recordId, messageData, 0, messageData.length);
 				rsm.closeRecordStore();
-				
+
 				return;
 			}
-			
+
 			int newRecordId = rsm.addRecord(messageData, 0, messageData.length);
 			rsm.closeRecordStore();
-			
+
 			JSONObject chatSession = new JSONObject();
 			chatSession.put("chatTitle", chatTitle);
 			chatSession.put("time", System.currentTimeMillis());
 			chatSession.put("recordId", newRecordId);
-			
-			RecordStore rsi = RecordStore.openRecordStore(chatTitleStoreName, true);		
+
+			RecordStore rsi = RecordStore.openRecordStore(chatTitleStoreName, true);
 
 			byte[] chatSessionData = rsi.getRecord(1);
 			JSONArray chatSessions = new JSONArray(new String(chatSessionData, "UTF-8"));
 			chatSessions.put(chatSession);
 			chatSessionData = chatSessions.toString().getBytes("UTF-8");
-			
+
 			rsi.setRecord(1, chatSessionData, 0, chatSessionData.length);
 			rsi.closeRecordStore();
 			setDirty(false);
-			
-        } catch (Exception e) {
-        	Util.dialogAlert("Save chat session failed: " + e.toString());
-        }
+
+		} catch (Exception e) {
+			Util.dialogAlert("Save chat session failed: " + e.toString());
+		}
 	}
-	
+
 	protected void makeMenu(Menu menu, int instance) {
 		super.makeMenu(menu, instance);
 		menu.add(new MenuItem(new StringProvider("Settings"), 100, 10) {
@@ -242,7 +242,7 @@ public class ChatScreen extends MainScreen {
 			}
 		});
 	}
-	
+
 	private void setTransition() {
 		ChatScreen chatScreen = ChatScreen.this;
 		TransitionContext transition = new TransitionContext(TransitionContext.TRANSITION_ZOOM);
@@ -256,5 +256,5 @@ public class ChatScreen extends MainScreen {
 		transitionPop.setIntAttribute(TransitionContext.ATTR_KIND, TransitionContext.KIND_OUT);
 		transitionPop.setIntAttribute(TransitionContext.ATTR_SCALE, 125);
 		engine.setTransition(chatScreen, null, UiEngineInstance.TRIGGER_POP, transitionPop);
-    }
+	}
 }
