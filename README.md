@@ -8,8 +8,8 @@
 
 ## Updates
 
-- Deploy your own proxy server to use official ChatGPT API: see [doc](docs/Dev/Deploy your proxy server.md)
-- Develop Blackberry OS 7 app in VS Code: see [doc](docs/Dev/Develop in VS code.md)
+- Deploy your own proxy server to use official ChatGPT API: see [doc]('docs/Dev/Deploy your proxy server.md')
+- Develop Blackberry OS 7 app in VS Code: see [doc]('docs/Dev/Develop in VS code.md')
 
 ## Installation
 
