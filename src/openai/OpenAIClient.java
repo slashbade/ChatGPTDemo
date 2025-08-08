@@ -6,7 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Vector;
 
-import javax.microedition.io.HttpsConnection;
+import javax.microedition.io.HttpConnection;
 
 import net.rim.device.api.io.transport.ConnectionDescriptor;
 import net.rim.device.api.io.transport.ConnectionFactory;
@@ -32,7 +32,7 @@ public class OpenAIClient {
         OpenAIRequest requestBody = new OpenAIRequest(model, messages, false);
         byte[] bodyData = requestBody.toJSONString().getBytes("UTF-8");
    
-        HttpsConnection conn = createHttpsConnection("/chat/completions");
+        HttpConnection conn = createConnection("/chat/completions");
         OutputStream os = conn.openOutputStream();
         os.write(bodyData);
         os.flush();
@@ -52,7 +52,7 @@ public class OpenAIClient {
         OpenAIRequest openAIRequest = new OpenAIRequest(model, messages, true);
         byte[] bodyData = openAIRequest.toJSONString().getBytes("UTF-8");
         
-        HttpsConnection conn = createHttpsConnection("/chat/completions");
+        HttpConnection conn = createConnection("/chat/completions");
         OutputStream os = conn.openOutputStream();
         os.write(bodyData);
         os.flush();
@@ -65,7 +65,7 @@ public class OpenAIClient {
      * @return
      * @throws IOException
      */
-    private HttpsConnection createHttpsConnection(String endPoint) throws IOException {
+    private HttpConnection createConnection(String endPoint) throws IOException {
         if (apiKey == null || apiKey.length() == 0) {
             throw new IOException("API Key not set.");
         }
@@ -84,10 +84,11 @@ public class OpenAIClient {
     	if (connDescr==null) {
     		throw new IOException("Network not available.");
     	}
-    	HttpsConnection conn = (HttpsConnection) connDescr.getConnection();
-        conn.setRequestMethod(HttpsConnection.POST);
-        conn.setRequestProperty("Content-Type", "application/json");
-        conn.setRequestProperty("Authorization", "Bearer " + apiKey);
+    	HttpConnection conn = (HttpConnection) connDescr.getConnection();
+		conn.setRequestMethod(HttpConnection.POST);
+		conn.setRequestProperty("Content-Type", "application/json");
+		conn.setRequestProperty("Authorization", "Bearer " + apiKey);
+        
         return conn;
     }
     

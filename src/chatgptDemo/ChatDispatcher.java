@@ -31,14 +31,16 @@ public class ChatDispatcher extends Thread {
 	}
 	
 	public void run() {
-		try {
+//		try {
 			client = new OpenAIClient(AppConfig.baseUrl, AppConfig.apiKey);
 			if (!(AppConfig.instruction.trim().equals("")) && screen.messages.isEmpty()) {
 				screen.appendMessage("system", AppConfig.instruction);
 			}
 			screen.appendMessage("user", userContent);
 			screen.addMessageWrapper("user", userContent);
-			final ResponseStream rs = client.createChatCompletionStream(screen.messages, AppConfig.model);
+			try {
+				final ResponseStream rs = client.createChatCompletionStream(screen.messages, AppConfig.model);
+			
 			final StringBuffer currentBuffer = new StringBuffer();
 			screen.addMessageWrapper("assistant", "");
 			OpenAICompletionChunk chunk;
@@ -57,10 +59,11 @@ public class ChatDispatcher extends Thread {
 			if (screen.messages.size() == 2) screen.setChatTitle(generateChatTitle());
 			screen.parseContentAtLastWrapper(true);
 			screen.setFocusOnInput();
-
-		} catch (final Exception e) {
-			Util.dialogAlert("Send failed: " + e.toString());
-		}
+			} catch (IOException e) {
+				Util.dialogAlert("Send failed: " + e.toString());
+			} catch (JSONException e) {
+				Util.dialogAlert("Send failed: " + e.toString());
+			}
 	}
 	
 	private static String ppMessages(Vector messages) {
@@ -79,7 +82,7 @@ public class ChatDispatcher extends Thread {
 		Vector titleMessages = new Vector();
 		titleMessages.addElement(new OpenAIMessage("user", titleInstructionString));
 		try {
-			OpenAICompletion response = titleClient.createChatCompletion(titleMessages, "gpt-3.5-turbo");
+			OpenAICompletion response = titleClient.createChatCompletion(titleMessages, "gpt-5-nano");
 			String titleString = ((OpenAICompletionChoice) response.choices.elementAt(0)).message.content;
 //			Util.dialogAlert(titleString);
 			return titleString;
