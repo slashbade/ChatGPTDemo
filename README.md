@@ -6,7 +6,14 @@
   <img src="./screenshots/screenshot-chat.png" height=240 alt="Main screen">
 </div>
 
+## Updates
+
+- Deploy your own proxy server to use official ChatGPT API: see [docs](./docs/Dev/Deploy your proxy server.md)
+- Develop Blackberry OS 7 app in VS Code: see [docs](./docs/Dev/Develop in VS code.md)
+
 ## Installation
+
+There are two ways to install this app on your Blackberry OS 7 device.
 
 ### OTA
 
@@ -28,7 +35,7 @@
 
 ## Development
 
-This app is still under development. I am open to any contributions, feel free to open an issue or a pull request. If you want to contribute, please make sure you have the prerequisites installed:
+This app is still under development and open to contribution. Please feel free to open an issue or submit a pull request. If you want to do some development, please make sure you have the prerequisites installed:
 
 - JDK 1.6.0 update 45
 - Blackberry Java Plug-in with Blackberry JRE 7.1.0
