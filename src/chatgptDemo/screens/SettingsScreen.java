@@ -33,6 +33,7 @@ public class SettingsScreen extends MainScreen {
 	EditField modelField;
 	EditField tempField;
 	EditField instructionField;
+	EditField titleModelField;
 	ButtonField saveButton;
 
     public SettingsScreen() {
@@ -49,10 +50,13 @@ public class SettingsScreen extends MainScreen {
         instanceSettingsGroup.add(padded(apiKeyField));
 
         VerticalFieldManager modelSettingsGroup = createSettingsGroup("Model");
-        addTitle("Model: (e.g. gpt-3.5-turbo)", modelSettingsGroup);
+        addTitle("Model: (e.g. gpt-4o)", modelSettingsGroup);
         modelField = new EditField("", AppConfig.model, 50, EditField.EDITABLE | Field.FOCUSABLE);
         modelSettingsGroup.add(padded(modelField));
-
+        
+        addTitle("Title Model:", modelSettingsGroup);
+        titleModelField = new EditField("", AppConfig.titleModel, 50, EditField.EDITABLE | Field.FOCUSABLE);
+        modelSettingsGroup.add(padded(titleModelField));
 
         addTitle("Temperature: (0.0 ~ 1.0)", modelSettingsGroup);
         tempField = new EditField("", String.valueOf(AppConfig.temperature), 10, EditField.EDITABLE | Field.FOCUSABLE);
@@ -84,6 +88,7 @@ public class SettingsScreen extends MainScreen {
     	String baseUrl = baseUrlField.getText().trim();
     	String apiKey = apiKeyField.getText().trim();
         String model = modelField.getText().trim();
+        String titleModel = titleModelField.getText().trim();
         String tempStr = tempField.getText().trim();
         String instruction = instructionField.getText().trim();
         
@@ -104,7 +109,7 @@ public class SettingsScreen extends MainScreen {
             return;
         }
 
-        AppConfig.saveAll(baseUrl, apiKey, model, temp, instruction);
+        AppConfig.saveAll(baseUrl, apiKey, model, titleModel, temp, instruction);
         setDirty(false);
     }
     

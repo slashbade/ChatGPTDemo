@@ -8,20 +8,21 @@ import net.rim.device.api.ui.component.Dialog;
 import org.json.me.*;
 
 public class AppConfig {
-    private static final String STORE_NAME = "AppConfigStoreJSON";
+    private static final String STORE_NAME = "AppConfigJSON";
     public static String baseUrl = "";
     public static String apiKey = "";
     public static String model = "";
+    public static String titleModel = "";
     public static double temperature = 0.7;
     public static String instruction = "";
 
-    public static void saveAll(String burl, String key, String mdl, double temp, String it) {
-        baseUrl = burl;
-    	apiKey = key;
-        model = mdl;
-        temperature = temp;
-        instruction = it;
-        
+    public static void saveAll(String baseUrl, String apiKey, String model, String titleModel, double temperature, String instruction) {
+        AppConfig.baseUrl = baseUrl;
+    	AppConfig.apiKey = apiKey;
+        AppConfig.model = model;
+        AppConfig.temperature = temperature;
+        AppConfig.instruction = instruction;
+        AppConfig.titleModel = titleModel;
         try {
             RecordStore.deleteRecordStore(STORE_NAME); // Clear old
         } catch (Exception ignored) {}
@@ -32,6 +33,7 @@ public class AppConfig {
             json.put("api_key", apiKey);
             json.put("base_url", baseUrl);
             json.put("model", model);
+            json.put("title_model", titleModel);
             json.put("temperature", temperature);
             json.put("instruction", instruction);
             String data = json.toString();
@@ -56,17 +58,11 @@ public class AppConfig {
                 apiKey = json.getString("api_key");
                 baseUrl = json.getString("base_url");
                 model = json.getString("model");
+                titleModel = json.getString("title_model");
                 temperature = json.getDouble("temperature");
                 instruction = json.getString("instruction");
             }
             rs.closeRecordStore();
-        } catch (final Exception e) {
-//        	UiApplication.getUiApplication().invokeLater(new Runnable() {
-//                public void run() {
-//                    Dialog.inform("Load failed: " + e.toString());
-//                }
-//            });
-        	
-        }
+        } catch (final Exception ignored) {}
     }
 }

@@ -82,7 +82,7 @@ public class ChatDispatcher extends Thread {
 		Vector titleMessages = new Vector();
 		titleMessages.addElement(new OpenAIMessage("user", titleInstructionString));
 		try {
-			OpenAICompletion response = titleClient.createChatCompletion(titleMessages, "gpt-5-nano");
+			OpenAICompletion response = titleClient.createChatCompletion(titleMessages, AppConfig.titleModel);
 			String titleString = ((OpenAICompletionChoice) response.choices.elementAt(0)).message.content;
 //			Util.dialogAlert(titleString);
 			return titleString;
